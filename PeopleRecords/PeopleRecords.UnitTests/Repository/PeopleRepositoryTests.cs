@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PeopleRecords.DataAccess;
 using PeopleRecords.Interfaces;
 using PeopleRecords.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace PeopleRecords.UnitTests
+namespace PeopleRecords.UnitTests.Repository
 {
     [TestClass]
     public class PeopleRepositoryTests

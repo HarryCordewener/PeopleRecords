@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PeopleRecords.Models;
 
-namespace PeopleRecords.UnitTests
+namespace PeopleRecords.UnitTests.Model
 {
     [TestClass]
     public class PersonModelTests
