@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PeopleRecords.Models
 {
     /// <summary>
     ///  last name, first name, gender, date of birth and favorite 
     /// </summary>
-    public class Person
+    public class Person : IEquatable<Person>
     {
         public int PersonId { get; }
         public string LastName { get; set; }
@@ -46,6 +47,44 @@ namespace PeopleRecords.Models
             Gender = person.Gender;
             DateOfBirth = person.DateOfBirth;
             FavoriteColor = person.FavoriteColor;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            // Check for null values and compare run-time types.
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            Person other = (Person)obj;
+            return PersonId == other.PersonId &&
+                LastName == other.LastName &&
+                FirstName == other.FirstName &&
+                Gender == other.Gender &&
+                DateOfBirth.Equals(other.DateOfBirth) &&
+                FavoriteColor == other.FavoriteColor;
+        }
+
+        public bool Equals(Person other)
+        {
+            return other != null &&
+                   PersonId == other.PersonId &&
+                   LastName == other.LastName &&
+                   FirstName == other.FirstName &&
+                   Gender == other.Gender &&
+                   DateOfBirth.Equals(other.DateOfBirth) &&
+                   FavoriteColor == other.FavoriteColor;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 1781705854;
+            hashCode = hashCode * -1521134295 + PersonId.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(LastName);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FirstName);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Gender);
+            hashCode = hashCode * -1521134295 + EqualityComparer<DateTimeOffset>.Default.GetHashCode(DateOfBirth);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FavoriteColor);
+            return hashCode;
         }
     }
 }

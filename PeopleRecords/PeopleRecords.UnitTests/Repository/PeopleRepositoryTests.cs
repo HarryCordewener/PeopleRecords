@@ -5,23 +5,33 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PeopleRecords.DataAccess;
 using PeopleRecords.Interfaces;
 using PeopleRecords.Models;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace PeopleRecords.UnitTests.Repository
 {
     [TestClass]
     public class PeopleRepositoryTests
     {
+        Mock<ILogger<InMemoryPeopleRepository>> logger = new Mock<ILogger<InMemoryPeopleRepository>>();
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            logger.Reset();
+        }
+
         [TestMethod]
         public void BaseConstructorHasEmptyList()
         {
-            IPeopleRepository repo = new InMemoryPeopleRepository();
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
             Assert.IsFalse(repo.ReadPeople().Any());
         }
 
         [TestMethod]
         public void CreateFailsOnNonZeroPersonId()
         {
-            IPeopleRepository repo = new InMemoryPeopleRepository();
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
             var person = new Person("first", "last", "male", System.DateTimeOffset.Now, "blue");
             var newPerson = new Person(5, person);
 
@@ -32,7 +42,7 @@ namespace PeopleRecords.UnitTests.Repository
         [TestMethod]
         public void CreateDoesNotFailOnSamePerson()
         {
-            IPeopleRepository repo = new InMemoryPeopleRepository();
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
             var person = new Person("first", "last", "male", System.DateTimeOffset.Now, "blue");
 
             repo.CreatePerson(person);
@@ -44,7 +54,7 @@ namespace PeopleRecords.UnitTests.Repository
         [TestMethod]
         public void ReadFailsOnNonExistantId()
         {
-            IPeopleRepository repo = new InMemoryPeopleRepository();
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
             var person = new Person("first", "last", "male", System.DateTimeOffset.Now, "blue");
 
             Person created = repo.CreatePerson(person);
@@ -55,7 +65,7 @@ namespace PeopleRecords.UnitTests.Repository
         [TestMethod]
         public void ReadSucceedsOnExistantId()
         {
-            IPeopleRepository repo = new InMemoryPeopleRepository();
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
             var person = new Person("first", "last", "male", System.DateTimeOffset.Now, "blue");
 
             Person created = repo.CreatePerson(person);
@@ -67,7 +77,7 @@ namespace PeopleRecords.UnitTests.Repository
         [TestMethod]
         public void UpdateFailsOnNonExistantId()
         {
-            IPeopleRepository repo = new InMemoryPeopleRepository();
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
             var person = new Person("first", "last", "male", System.DateTimeOffset.Now, "blue");
 
             Person created = repo.CreatePerson(person);
@@ -81,7 +91,7 @@ namespace PeopleRecords.UnitTests.Repository
         [TestMethod]
         public void UpdateSucceeds()
         {
-            IPeopleRepository repo = new InMemoryPeopleRepository();
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
             var person = new Person("first", "last", "male", System.DateTimeOffset.Now, "blue");
 
             Person created = repo.CreatePerson(person);
@@ -101,7 +111,7 @@ namespace PeopleRecords.UnitTests.Repository
         [TestMethod]
         public void DeleteFailsOnNonExistantId()
         {
-            IPeopleRepository repo = new InMemoryPeopleRepository();
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
             var person = new Person("first", "last", "male", System.DateTimeOffset.Now, "blue");
 
             Person created = repo.CreatePerson(person);
@@ -114,7 +124,7 @@ namespace PeopleRecords.UnitTests.Repository
         [TestMethod]
         public void DeleteSucceedsOnExistantId()
         {
-            IPeopleRepository repo = new InMemoryPeopleRepository();
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
             var person = new Person("first", "last", "male", System.DateTimeOffset.Now, "blue");
 
             Person created = repo.CreatePerson(person);
