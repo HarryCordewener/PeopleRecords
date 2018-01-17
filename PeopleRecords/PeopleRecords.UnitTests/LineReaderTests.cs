@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PeopleRecords.Interfaces;
 using PeopleRecords.DataAccess;
 using PeopleRecords.Models;
-using System.Threading.Tasks;
 using Moq;
 using System.Collections.Generic;
 
@@ -44,6 +43,30 @@ namespace PeopleRecords.UnitTests
             LineReader.ImportFileIntoRepository(lines, repository.Object);
 
             repository.Verify(x => x.CreatePerson(testPerson), Times.Exactly(6));
+        }
+
+        [TestMethod]
+        public void TestLineSuccessForExtraSpaces()
+        {
+            List<Person> peeps = new List<Person>();
+
+            // There is a discrepancy that gets introduced here, if we don't parse the stringified value.
+            DateTimeOffset nowTime = DateTimeOffset.Now;
+            string now = nowTime.ToString();
+
+            nowTime = DateTimeOffset.Parse(now);
+            var testPerson = new Person("last name", "first name", "my gender", nowTime, "favorite Color");
+
+            string[] lines = new string[] {
+                $"last name,first name,my gender,favorite Color,{now}",
+                $"last name , first name , my gender , favorite Color , {now}",
+                $"last name|first name|my gender|favorite Color|{now}",
+                $"last name | first name | my gender | favorite Color | {now}",
+            };
+
+            LineReader.ImportFileIntoRepository(lines, repository.Object);
+
+            repository.Verify(x => x.CreatePerson(testPerson), Times.Exactly(4));
         }
 
         [TestMethod]

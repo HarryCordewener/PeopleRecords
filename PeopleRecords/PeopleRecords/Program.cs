@@ -12,18 +12,20 @@ namespace PeopleRecords
     public class ConsoleApp
     {
         IPeopleRepository PeopleRepository { get; set; }
+
         string[] FileLocations { get; }
 
-        public ConsoleApp(ServiceProvider provider, string[] args)
+        public ConsoleApp(IPeopleRepository repo, string[] args)
         {
-            if (provider == null) throw new ArgumentNullException(nameof(provider));
-            var peopleRepo = provider.GetService(typeof(IPeopleRepository));
-            if(args.Count() != 3)
+            if (repo == null) throw new ArgumentNullException(nameof(repo));
+            PeopleRepository = repo;
+            if (args.Count() != 3)
             {
                 throw new ArgumentOutOfRangeException(nameof(args));
             }
 
-            foreach( string fileLocation in args)
+
+            foreach (string fileLocation in args)
             {
                 if (!File.Exists(fileLocation))
                 {
@@ -38,7 +40,7 @@ namespace PeopleRecords
         {
             try
             {
-                foreach(string fileLocation in FileLocations)
+                foreach (string fileLocation in FileLocations)
                 {
                     var fileLines = await File.ReadAllLinesAsync(fileLocation);
                     LineReader.ImportFileIntoRepository(fileLines, PeopleRepository);
@@ -53,16 +55,23 @@ namespace PeopleRecords
             {
                 Console.WriteLine("Select an ordering method, or quit: name, birthdate, gender, quit");
                 var order = Console.ReadLine();
+                object result;
                 if (order == "quit") break;
-                if (System.Enum.TryParse(typeof(OrderOption), order, out object result))
+                if (System.Enum.TryParse(typeof(OrderOption), order, out result))
                 {
-                    foreach(Person person in PeopleRepository.ReadPeople((OrderOption)result))
+                    if (!PeopleRepository.ReadPeople().Any())
+                    {
+                        Console.WriteLine("List was Empty");
+                        continue;
+                    }
+
+                    foreach (Person person in PeopleRepository.ReadPeople((OrderOption)result))
                     {
                         Console.WriteLine(person);
                     }
                     continue;
                 }
-                else 
+                else
                 {
                     Console.WriteLine("Invalid entry.");
                     continue;

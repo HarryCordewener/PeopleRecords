@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Linq;
+using PeopleRecords.DataAccess;
 
 namespace PeopleRecords.UnitTests.Model
 {
@@ -20,7 +21,7 @@ namespace PeopleRecords.UnitTests.Model
 
         public WebApiEndpointsTests()
         {
-            _server = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+            _server = new TestServer(new WebHostBuilder().UseStartup<Startup>().ConfigureServices(Program.ConfigureMyServices));
             _client = _server.CreateClient();
         }
 

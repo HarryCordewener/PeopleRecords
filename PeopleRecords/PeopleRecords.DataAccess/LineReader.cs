@@ -9,13 +9,21 @@ namespace PeopleRecords.DataAccess
 {
     static public class LineReader
     {
-        private static Regex LineMatch = new Regex(@"^" +
-            @"(?<LastName>\w+)[\u007c\s,]\s*" +
-            @"(?<FirstName>\w+)[\u007c\s,]\s*" +
-            @"(?<Gender>\w+)[\u007c\s,]\s*" +
-            @"(?<FavoriteColor>\w+)[\u007c\s,]\s*" +
-            @"(?<DateOfBirth>.+)" +
-            @"$");
+        private static Regex LineMatch = new Regex(@"^\s*" +
+            @"(?<LastName>.+?)\s*[\u007c,]\s*" +
+            @"(?<FirstName>.+?)\s*[\u007c,]\s*" +
+            @"(?<Gender>.+?)\s*[\u007c,]\s*" +
+            @"(?<FavoriteColor>.+?)\s*[\u007c,]\s*" +
+            @"(?<DateOfBirth>.+?)" +
+            @"\s*$");
+
+        private static Regex LineMatchForSpace = new Regex(@"^\s*" +
+            @"(?<LastName>.+?)\s+" +
+            @"(?<FirstName>.+?)\s+" +
+            @"(?<Gender>.+?)\s+" +
+            @"(?<FavoriteColor>.+?)\s+" +
+            @"(?<DateOfBirth>.+?)" +
+            @"\s*$");
 
         /// <summary>
         /// Asynchronously imports a file into an <see cref="IPeopleRepository"/>. Throws an exception on any failed line, and stops.
@@ -58,7 +66,11 @@ namespace PeopleRecords.DataAccess
             DateTimeOffset dateOfBirth;
 
             var match = LineMatch.Match(line);
-            if (!match.Success) throw new ArgumentOutOfRangeException(nameof(line));
+            if (!match.Success)
+            {
+                match = LineMatchForSpace.Match(line);
+                if (!match.Success) throw new ArgumentOutOfRangeException(nameof(line));
+            }
 
             string lastName = match.Groups["LastName"].Value;
             string firstName = match.Groups["FirstName"].Value;
@@ -66,7 +78,14 @@ namespace PeopleRecords.DataAccess
             string favoriteColor = match.Groups["FavoriteColor"].Value;
             string dateOfBirthString = match.Groups["DateOfBirth"].Value;
 
-            if (!DateTimeOffset.TryParse(dateOfBirthString, out dateOfBirth)) throw new ArgumentOutOfRangeException("dateOfBirth");
+            if (!DateTimeOffset.TryParse(dateOfBirthString, out dateOfBirth))
+            {
+                if(DateTime.TryParse(dateOfBirthString, out DateTime dateOfBirthAlter))
+                {
+                    dateOfBirth = new DateTimeOffset(dateOfBirthAlter);
+                }
+                else throw new ArgumentOutOfRangeException("dateOfBirth");
+            }
 
             return new Person(lastName, firstName, gender, dateOfBirth, favoriteColor);
         }

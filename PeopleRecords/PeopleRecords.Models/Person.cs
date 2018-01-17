@@ -112,7 +112,7 @@ namespace PeopleRecords.Models
 
         public override string ToString()
         {
-            return $"{LastName} | {FirstName} | {Gender} | {DateOfBirth.ToString("M/D/YYYY")} | {FavoriteColor}";
+            return $"{LastName} | {FirstName} | {Gender} | {DateOfBirth.ToString("M/d/yyyy")} | {FavoriteColor}";
         }
     }
 }
