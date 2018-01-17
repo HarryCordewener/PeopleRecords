@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 namespace PeopleRecords.Interfaces
 {
+    public enum OrderOption
+    {
+        gender = 0,
+        birthdate = 1,
+        name = 2
+    }
+
     public interface IPeopleRepository
     {
         /// <summary>
@@ -18,6 +25,12 @@ namespace PeopleRecords.Interfaces
         /// </summary>
         /// <returns>All People</returns>
         IEnumerable<Person> ReadPeople();
+
+        /// <summary>
+        /// Reads all People in the repository, using an Order Type.
+        /// </summary>
+        /// <returns>All People</returns>
+        IEnumerable<Person> ReadPeople(OrderOption order);
 
         /// <summary>
         /// Reads a Person based on their ID.

@@ -3,6 +3,7 @@ using System;
 using PeopleRecords.Models;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace PeopleRecords.DataAccess
 {
@@ -20,6 +21,7 @@ namespace PeopleRecords.DataAccess
 
         public Person CreatePerson(Person person)
         {
+            if (person == null) throw new ArgumentNullException(nameof(person));
             if (person.PersonId != 0) throw new ArgumentOutOfRangeException(nameof(person.PersonId));
             var identifiedPerson = new Person(IncrementingCounter, person);
             People.Add(IncrementingCounter, identifiedPerson);
@@ -44,6 +46,28 @@ namespace PeopleRecords.DataAccess
             }
         }
 
+        public IEnumerable<Person> ReadPeople(OrderOption order)
+        {
+            IEnumerable<Person> orderedResult = null;
+            
+            switch(order)
+            {
+                case OrderOption.birthdate:
+                    orderedResult = ReadPeople().OrderByDescending(x => x.DateOfBirth);
+                    break;
+                case OrderOption.gender:
+                    orderedResult = ReadPeople().OrderBy(x => x.Gender).ThenBy(x => x.LastName);
+                    break;
+                case OrderOption.name:
+                    orderedResult = ReadPeople().OrderByDescending(x => x.LastName);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(order));
+            }
+
+            return orderedResult;
+        }
+
         public Person ReadPerson(int id)
         {
             if (!People.ContainsKey(id)) throw new KeyNotFoundException();
@@ -52,6 +76,7 @@ namespace PeopleRecords.DataAccess
 
         public Person UpdatePerson(Person target)
         {
+            if (target == null) throw new ArgumentNullException(nameof(target));
             if (!People.ContainsKey(target.PersonId)) throw new KeyNotFoundException();
             People[target.PersonId] = target;
             return target;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace PeopleRecords.Models
 {
@@ -16,9 +17,8 @@ namespace PeopleRecords.Models
         public string FavoriteColor { get; set; }
 
         /// <summary>
-        /// Generates a person with the information provided.
+        /// Generates a person with the information provided. Defaults the PersonId to 0.
         /// </summary>
-        /// <param name="personId">The record's Identifier, defaults to 0</param>
         /// <param name="lastName">The record's Last Name</param>
         /// <param name="firstName">The record's First Name</param>
         /// <param name="gender">The record's Gender</param>
@@ -27,6 +27,25 @@ namespace PeopleRecords.Models
         public Person(string lastName, string firstName, string gender, DateTimeOffset dateOfBirth, string favoriteColor)
         {
             PersonId = 0;
+            LastName = lastName;
+            FirstName = firstName;
+            Gender = gender;
+            DateOfBirth = dateOfBirth;
+            FavoriteColor = favoriteColor;
+        }
+
+        /// <summary>
+        /// Generates a person with the information provided.
+        /// </summary>
+        /// <param name="personId">The record's Identifier</param>
+        /// <param name="lastName">The record's Last Name</param>
+        /// <param name="firstName">The record's First Name</param>
+        /// <param name="gender">The record's Gender</param>
+        /// <param name="dateOfBirth">The record's Date of Birth</param>
+        /// <param name="favoriteColor">The record's Favorite color</param>
+        public Person(int personId, string lastName, string firstName, string gender, DateTimeOffset dateOfBirth, string favoriteColor)
+        {
+            PersonId = personId;
             LastName = lastName;
             FirstName = firstName;
             Gender = gender;
@@ -47,6 +66,10 @@ namespace PeopleRecords.Models
             Gender = person.Gender;
             DateOfBirth = person.DateOfBirth;
             FavoriteColor = person.FavoriteColor;
+        }
+
+        public Person()
+        {
         }
 
         public override bool Equals(Object obj)
