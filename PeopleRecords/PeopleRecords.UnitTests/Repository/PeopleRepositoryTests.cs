@@ -29,6 +29,99 @@ namespace PeopleRecords.UnitTests.Repository
         }
 
         [TestMethod]
+        public void ReadAllSortedByName()
+        {
+            var people = new List<Person>()
+            {
+                new Person("d", "e", "f", DateTimeOffset.Parse("04-02-1987 00:00"), "g"),
+                new Person("c", "d", "e", DateTimeOffset.Parse("03-02-1987 00:00"), "f"),
+                new Person("b", "c", "d", DateTimeOffset.Parse("02-02-1987 00:00"), "e"),
+                new Person("a", "b", "c", DateTimeOffset.Parse("01-02-1987 00:00"), "d")
+            };
+
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
+
+            // This will insert it in the wrong order: ascending instead of descending.
+            foreach (var item in people.OrderBy(x => x.FirstName))
+            {
+                repo.CreatePerson(item);
+            }
+
+            List<Person> orderedPeople = repo.ReadPeople(OrderOption.name).ToList();
+
+            for (int i = 0; i < 4; i++)
+            {
+                Assert.AreEqual(people[i].FavoriteColor, orderedPeople[i].FavoriteColor);
+                Assert.AreEqual(people[i].FirstName, orderedPeople[i].FirstName);
+                Assert.AreEqual(people[i].LastName, orderedPeople[i].LastName);
+                Assert.AreEqual(people[i].DateOfBirth, orderedPeople[i].DateOfBirth);
+                Assert.AreEqual(people[i].Gender, orderedPeople[i].Gender);
+            }
+        }
+
+        [TestMethod]
+        public void ReadAllSortedByGender()
+        {
+            var people = new List<Person>()
+            {
+                new Person("a", "e", "f", DateTimeOffset.Parse("04-02-1987 00:00"), "g"),
+                new Person("b", "d", "f", DateTimeOffset.Parse("03-02-1987 00:00"), "f"),
+                new Person("c", "c", "m", DateTimeOffset.Parse("02-02-1987 00:00"), "e"),
+                new Person("d", "b", "m", DateTimeOffset.Parse("01-02-1987 00:00"), "d")
+            };
+
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
+
+            // This will insert it in the wrong order: descending last names in stead of ascending.
+            foreach (var item in people.OrderByDescending(x => x.FirstName))
+            {
+                repo.CreatePerson(item);
+            }
+
+            List<Person> orderedPeople = repo.ReadPeople(OrderOption.gender).ToList();
+
+            for (int i = 0; i < 4; i++)
+            {
+                Assert.AreEqual(people[i].FavoriteColor, orderedPeople[i].FavoriteColor);
+                Assert.AreEqual(people[i].FirstName, orderedPeople[i].FirstName);
+                Assert.AreEqual(people[i].LastName, orderedPeople[i].LastName);
+                Assert.AreEqual(people[i].DateOfBirth, orderedPeople[i].DateOfBirth);
+                Assert.AreEqual(people[i].Gender, orderedPeople[i].Gender);
+            }
+        }
+
+        [TestMethod]
+        public void ReadAllSortedByBirthDate()
+        {
+            var people = new List<Person>()
+            {
+                new Person("d", "e", "f", DateTimeOffset.Parse("01-02-1987 00:00"), "g"),
+                new Person("c", "d", "e", DateTimeOffset.Parse("02-02-1987 00:00"), "f"),
+                new Person("b", "c", "d", DateTimeOffset.Parse("03-02-1987 00:00"), "e"),
+                new Person("a", "b", "c", DateTimeOffset.Parse("04-02-1987 00:00"), "d")
+            };
+
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
+
+            // This will insert it in the wrong order: ascending instead of descending.
+            foreach (var item in people.OrderByDescending(x => x.DateOfBirth))
+            {
+                repo.CreatePerson(item);
+            }
+
+            List<Person> orderedPeople = repo.ReadPeople(OrderOption.birthdate).ToList();
+
+            for (int i = 0; i < 4; i++)
+            {
+                Assert.AreEqual(people[i].FavoriteColor, orderedPeople[i].FavoriteColor);
+                Assert.AreEqual(people[i].FirstName, orderedPeople[i].FirstName);
+                Assert.AreEqual(people[i].LastName, orderedPeople[i].LastName);
+                Assert.AreEqual(people[i].DateOfBirth, orderedPeople[i].DateOfBirth);
+                Assert.AreEqual(people[i].Gender, orderedPeople[i].Gender);
+            }
+        }
+
+        [TestMethod]
         public void CreateFailsOnNonZeroPersonId()
         {
             IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
@@ -85,7 +178,7 @@ namespace PeopleRecords.UnitTests.Repository
 
             Person falseUpdate = new Person(created.PersonId + 1, created);
 
-            Assert.ThrowsException<KeyNotFoundException>( () => repo.UpdatePerson(falseUpdate));
+            Assert.ThrowsException<KeyNotFoundException>(() => repo.UpdatePerson(falseUpdate));
         }
 
         [TestMethod]

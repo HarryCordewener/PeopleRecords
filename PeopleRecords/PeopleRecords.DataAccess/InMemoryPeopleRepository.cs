@@ -53,7 +53,7 @@ namespace PeopleRecords.DataAccess
             switch(order)
             {
                 case OrderOption.birthdate:
-                    orderedResult = ReadPeople().OrderByDescending(x => x.DateOfBirth);
+                    orderedResult = ReadPeople().OrderBy(x => x.DateOfBirth);
                     break;
                 case OrderOption.gender:
                     orderedResult = ReadPeople().OrderBy(x => x.Gender).ThenBy(x => x.LastName);
