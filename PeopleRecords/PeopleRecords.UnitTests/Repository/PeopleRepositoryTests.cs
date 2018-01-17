@@ -65,8 +65,8 @@ namespace PeopleRecords.UnitTests.Repository
             var people = new List<Person>()
             {
                 new Person("a", "e", "f", DateTimeOffset.Parse("04-02-1987 00:00"), "g"),
-                new Person("b", "d", "f", DateTimeOffset.Parse("03-02-1987 00:00"), "f"),
-                new Person("c", "c", "m", DateTimeOffset.Parse("02-02-1987 00:00"), "e"),
+                new Person("c", "d", "f", DateTimeOffset.Parse("03-02-1987 00:00"), "f"),
+                new Person("b", "c", "m", DateTimeOffset.Parse("02-02-1987 00:00"), "e"),
                 new Person("d", "b", "m", DateTimeOffset.Parse("01-02-1987 00:00"), "d")
             };
 

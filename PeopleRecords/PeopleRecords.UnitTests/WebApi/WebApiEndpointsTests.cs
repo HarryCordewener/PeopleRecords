@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Linq;
-using PeopleRecords.DataAccess;
 
 namespace PeopleRecords.UnitTests.Model
 {

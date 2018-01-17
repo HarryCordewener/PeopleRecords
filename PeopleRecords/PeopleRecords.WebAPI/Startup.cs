@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PeopleRecords.DataAccess;
-using PeopleRecords.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PeopleRecords.WebAPI
 {
+    [ExcludeFromCodeCoverage] // Integration Tests are better here.
     public class Startup
     {
         public Startup(IConfiguration configuration)

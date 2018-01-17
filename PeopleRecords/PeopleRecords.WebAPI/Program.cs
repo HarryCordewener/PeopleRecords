@@ -6,11 +6,13 @@ using Newtonsoft.Json;
 using PeopleRecords.DataAccess;
 using PeopleRecords.Interfaces;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace PeopleRecords.WebAPI
 {
+    [ExcludeFromCodeCoverage] // Integration Tests are better here.
     public class Program
     {
         private static ServiceProvider Provider;

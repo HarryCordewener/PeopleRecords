@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using PeopleRecords.DataAccess;
+﻿using PeopleRecords.DataAccess;
 using PeopleRecords.Interfaces;
 using PeopleRecords.Models;
 using System;
@@ -17,13 +16,11 @@ namespace PeopleRecords
 
         public ConsoleApp(IPeopleRepository repo, string[] args)
         {
-            if (repo == null) throw new ArgumentNullException(nameof(repo));
-            PeopleRepository = repo;
+            PeopleRepository = repo ?? throw new ArgumentNullException(nameof(repo));
             if (args.Count() != 3)
             {
                 throw new ArgumentOutOfRangeException(nameof(args));
             }
-
 
             foreach (string fileLocation in args)
             {
@@ -55,9 +52,8 @@ namespace PeopleRecords
             {
                 Console.WriteLine("Select an ordering method, or quit: name, birthdate, gender, quit");
                 var order = Console.ReadLine();
-                object result;
                 if (order == "quit") break;
-                if (System.Enum.TryParse(typeof(OrderOption), order, out result))
+                if (System.Enum.TryParse(typeof(OrderOption), order, out object result))
                 {
                     if (!PeopleRepository.ReadPeople().Any())
                     {
