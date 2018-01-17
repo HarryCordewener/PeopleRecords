@@ -9,8 +9,10 @@ namespace PeopleRecords.DataAccess
 {
     public class InMemoryPeopleRepository : IPeopleRepository
     {
-        ILogger<InMemoryPeopleRepository> Logger;
+        readonly ILogger<InMemoryPeopleRepository> Logger;
+
         private Dictionary<int, Person> People { get; }
+
         int IncrementingCounter { get; set; } = 0;
 
         public InMemoryPeopleRepository(ILogger<InMemoryPeopleRepository> logger)

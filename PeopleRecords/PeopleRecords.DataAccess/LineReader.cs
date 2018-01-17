@@ -80,11 +80,7 @@ namespace PeopleRecords.DataAccess
 
             if (!DateTimeOffset.TryParse(dateOfBirthString, out dateOfBirth))
             {
-                if(DateTime.TryParse(dateOfBirthString, out DateTime dateOfBirthAlter))
-                {
-                    dateOfBirth = new DateTimeOffset(dateOfBirthAlter);
-                }
-                else throw new ArgumentOutOfRangeException("dateOfBirth");
+                throw new ArgumentOutOfRangeException("dateOfBirth");
             }
 
             return new Person(lastName, firstName, gender, dateOfBirth, favoriteColor);

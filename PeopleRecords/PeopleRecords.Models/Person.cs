@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace PeopleRecords.Models
 {
@@ -35,22 +36,40 @@ namespace PeopleRecords.Models
         }
 
         /// <summary>
+        /// Generates a person with the information provided. 
+        /// This constuctor is used by Deserializers.
+        /// TODO: Make this internal, and expose it to just the WebAPI dll? We don't want this used, by convention.
+        /// </summary>
+        /// <param name="personId">The record's number.</param>
+        /// <param name="lastName">The record's Last Name</param>
+        /// <param name="firstName">The record's First Name</param>
+        /// <param name="gender">The record's Gender</param>
+        /// <param name="dateOfBirth">The record's Date of Birth</param>
+        /// <param name="favoriteColor">The record's Favorite color</param>
+        [JsonConstructor]
+        public Person(int personId, string lastName, string firstName, string gender, DateTimeOffset dateOfBirth, string favoriteColor)
+        {
+            PersonId = personId;
+            LastName = lastName;
+            FirstName = firstName;
+            Gender = gender;
+            DateOfBirth = dateOfBirth;
+            FavoriteColor = favoriteColor;
+        }
+
+        /// <summary>
         /// Creates an instance of a person with a specific Identifier.
         /// </summary>
-        /// <param name="Identifier">The PersonId for the Person</param>
+        /// <param name="identifier">The PersonId for the Person</param>
         /// <param name="person">The Person to copy from</param>
-        public Person(int Identifier, Person person)
+        public Person(int identifier, Person person)
         {
-            PersonId = Identifier;
+            PersonId = identifier;
             LastName = person.LastName;
             FirstName = person.FirstName;
             Gender = person.Gender;
             DateOfBirth = person.DateOfBirth;
             FavoriteColor = person.FavoriteColor;
-        }
-
-        public Person()
-        {
         }
 
         public override bool Equals(Object obj)
@@ -93,7 +112,7 @@ namespace PeopleRecords.Models
 
         public override string ToString()
         {
-            return $"{LastName} | {FirstName} | {Gender} | {DateOfBirth.ToString("M/d/yyyy")} | {FavoriteColor}";
+            return $"{LastName} | {FirstName} | {Gender} | {DateOfBirth:M/d/yyyy} | {FavoriteColor}";
         }
     }
 }

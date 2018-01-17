@@ -45,6 +45,26 @@ namespace PeopleRecords.UnitTests
             repository.Verify(x => x.CreatePerson(testPerson), Times.Exactly(6));
         }
 
+
+        [TestMethod]
+        public void TestLineFailsForBadDateTimeOffSet()
+        {
+            List<Person> peeps = new List<Person>();
+
+            string now = "abasd";
+
+            string[] lines = new string[] {
+                $"last,first,gender,favoriteColor,{now}",
+                $"last, first, gender, favoriteColor, {now}",
+                $"last|first|gender|favoriteColor|{now}",
+                $"last| first| gender| favoriteColor| {now}",
+                $"last first gender favoriteColor {now}",
+                $"last  first  gender  favoriteColor  {now}",
+            };
+
+            Assert.ThrowsException<ArgumentOutOfRangeException>(()=>LineReader.ImportFileIntoRepository(lines, repository.Object));
+        }
+
         [TestMethod]
         public void TestLineSuccessForExtraSpaces()
         {

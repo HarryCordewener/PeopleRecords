@@ -60,6 +60,13 @@ namespace PeopleRecords.UnitTests.Repository
         }
 
         [TestMethod]
+        public void ReadPeopleThrowsOnBadSort()
+        {
+            IPeopleRepository repo = new InMemoryPeopleRepository(logger.Object);
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => repo.ReadPeople((OrderOption)4));
+        }
+
+        [TestMethod]
         public void ReadAllSortedByGender()
         {
             var people = new List<Person>()

@@ -2,12 +2,14 @@
 using PeopleRecords.Interfaces;
 using PeopleRecords.Models;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace PeopleRecords
 {
+    [ExcludeFromCodeCoverage]
     public class ConsoleApp
     {
         IPeopleRepository PeopleRepository { get; set; }
