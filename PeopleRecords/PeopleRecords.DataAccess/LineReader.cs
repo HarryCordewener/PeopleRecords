@@ -23,11 +23,11 @@ namespace PeopleRecords.DataAccess
         /// <param name="filePath">The file path</param>
         /// <param name="peopleRepository">The repository to import into</param>
         /// <returns></returns>
-        public static async Task ImportFileIntoRepositoryAsync(Task<string[]> lines, IPeopleRepository peopleRepository)
+        public static void ImportFileIntoRepository(string[] lines, IPeopleRepository peopleRepository)
         {
             try
-            {  
-                foreach(var line in await lines)
+            {
+                foreach (var line in lines)
                 {
                     Person processedLine = TransformLineToPerson(line);
                     peopleRepository.CreatePerson(processedLine);

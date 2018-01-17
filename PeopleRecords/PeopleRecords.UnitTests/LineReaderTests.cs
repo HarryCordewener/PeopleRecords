@@ -41,7 +41,7 @@ namespace PeopleRecords.UnitTests
                 $"last  first  gender  favoriteColor  {now}",
             };
 
-            LineReader.ImportFileIntoRepositoryAsync(Task.FromResult(lines), repository.Object).GetAwaiter().GetResult();
+            LineReader.ImportFileIntoRepository(lines, repository.Object);
 
             repository.Verify(x => x.CreatePerson(testPerson), Times.Exactly(6));
         }
@@ -59,7 +59,7 @@ namespace PeopleRecords.UnitTests
             };
 
             Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
-                LineReader.ImportFileIntoRepositoryAsync(Task.FromResult(lines), repository.Object).GetAwaiter().GetResult());
+                LineReader.ImportFileIntoRepository(lines, repository.Object));
         }
 
         [TestMethod]
@@ -75,7 +75,7 @@ namespace PeopleRecords.UnitTests
             };
 
             Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
-                LineReader.ImportFileIntoRepositoryAsync(Task.FromResult(lines), repository.Object).GetAwaiter().GetResult());
+                LineReader.ImportFileIntoRepository(lines, repository.Object));
         }
     }
 }

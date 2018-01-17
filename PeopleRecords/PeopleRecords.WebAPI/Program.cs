@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PeopleRecords.Interfaces;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,7 +19,8 @@ namespace PeopleRecords.WebAPI
             Thread.Sleep(2000);
             Console.Clear();
             Console.ReadLine();
-            var peopleRepo = provider.GetService<IPeopleRepository>();
+            var console = new ConsoleApp(provider, args);
+            console.Run().GetAwaiter().GetResult();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>

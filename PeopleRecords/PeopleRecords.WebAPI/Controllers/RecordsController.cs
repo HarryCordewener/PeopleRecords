@@ -53,9 +53,9 @@ namespace PeopleRecords.WebAPI.Controllers
         /// Required api endpoint #1.
         /// </summary>
         [HttpPost]
-        public async Task<Person> Post([FromBody]string lineValue)
+        public Person Post([FromBody]string lineValue)
         {
-            await LineReader.ImportFileIntoRepositoryAsync(Task.FromResult(new[] { lineValue }), PeopleRepository);
+            LineReader.ImportFileIntoRepository(new[] { lineValue }, PeopleRepository);
             return PeopleRepository.ReadPeople().Last();
         }
 

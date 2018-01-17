@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PeopleRecords.DataAccess\PeopleRecords.DataAccess.csproj" />
+    <ProjectReference Include="..\PeopleRecords\PeopleRecords.Console.csproj" />
   </ItemGroup>
 
 </Project>

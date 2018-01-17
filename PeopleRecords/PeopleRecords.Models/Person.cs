@@ -109,5 +109,10 @@ namespace PeopleRecords.Models
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FavoriteColor);
             return hashCode;
         }
+
+        public override string ToString()
+        {
+            return $"{LastName} | {FirstName} | {Gender} | {DateOfBirth.ToString("M/D/YYYY")} | {FavoriteColor}";
+        }
     }
 }
